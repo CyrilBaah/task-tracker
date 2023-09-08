@@ -21,7 +21,7 @@ Clone the repository to your local machine
 
 1. Clone the repository to your local machine:
 ```sh
-git clone <repository-url>
+git clone https://github.com/CyrilBaah/task-tracker.git
 cd task-tracker
 ```
 2. Install the project dependencies:
