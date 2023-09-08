@@ -1,73 +1,69 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+## Task Tracker
+Task Tracker is a simple task management application built with NestJS, a powerful Node.js framework for building scalable and efficient server-side applications. With Task Tracker, you can easily create, list, and delete tasks.
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Features
+- Create Tasks: Add new tasks with titles.
+- List Tasks: View a list of all your tasks.
+- Delete Tasks: Remove tasks from your task list.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Getting Started
+Follow the steps below to set up and run Task Tracker on your local machine.
 
-## Description
+## Prerequisites
+Before you begin, ensure you have the following dependencies installed on your system:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- [Node](https://nodejs.org/en "Node") | JavaScript runtime environment.
+- [Npm](https://www.npmjs.com/ "Npm") | Node Package Manager.
+- [NestJS](https://docs.nestjs.com/cli/overview "NestJS") | To generate and manage your NestJS application.
 
 ## Installation
+Clone the repository to your local machine
 
-```bash
-$ npm install
+1. Clone the repository to your local machine:
+```sh
+git clone <repository-url>
+cd task-tracker
+```
+2. Install the project dependencies:
+```sh
+npm install
 ```
 
-## Running the app
+## Running the Application
+Start the Task Tracker application using the following command:
+```sh
+npm run start
+```
+The application will run on http://localhost:3000.
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+## Lint the Application
+```sh
+npm run lint
 ```
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+## Format the Application
+```sh
+npm run format
 ```
 
-## Support
+## Usage
+1.To create a new task, send a POST request to http://localhost:3000/tasks with a JSON body containing the task title.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Example using cURL:
+```sh
+curl -X POST -H "Content-Type: application/json" -d '{"title": "Task 1"}' http://localhost:3000/tasks
+```
 
-## Stay in touch
+2.To list all tasks, send a GET request to http://localhost:3000/tasks.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Example using cURL:
+```sh
+curl http://localhost:3000/tasks
+```
 
-## License
+3.To delete a task, send a DELETE request to http://localhost:3000/tasks/:id, where :id is the ID of the task you want to delete.
 
-Nest is [MIT licensed](LICENSE).
+Example using cURL (replace <taskId> with the actual task ID):
+```sh
+curl -X DELETE http://localhost:3000/tasks/<taskId>
+```
