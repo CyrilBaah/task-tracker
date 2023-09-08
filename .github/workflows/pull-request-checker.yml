@@ -1,0 +1,77 @@
+name: Pull Request checker
+
+on:
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 18
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Linting
+      run: npm run lint
+
+    - name: Format
+      run: npm run format
+
+    - name: Run Tests
+      run: npm test
+
+  vulnerability-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Trivy
+      run: |
+        wget https://github.com/aquasecurity/trivy/releases/download/v0.21.0/trivy_0.21.0_Linux-64bit.tar.gz
+        tar zxvf trivy_0.21.0_Linux-64bit.tar.gz
+        sudo mv trivy /usr/local/bin/
+        rm trivy_0.21.0_Linux-64bit.tar.gz
+
+    - name: Scan Docker Image for Vulnerabilities
+      run: |
+        docker build -t task-tracker:latest .
+        trivy --exit-code 0 --severity HIGH,CRITICAL task-tracker:latest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install NestJS CLI
+      run: npm install -g @nestjs/cli
+
+    - name: Deploy to GitHub Pages
+      run: |
+        npm install -g gh-pages
+        npm install
+        npm run start
+        gh-pages -d dist -b gh-pages
+
+    - name: Deployment Status
+      run: |
+        if [ $? -eq 0 ]; then
+          echo "Deployment succeeded! Access your site at https://<github-username>.github.io/<repository-name>/"
+        else
+          echo "Deployment failed."
+          exit 1
+        fi
