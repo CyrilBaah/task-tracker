@@ -51,7 +51,7 @@ jobs:
           chmod 600 $SSH_KEY_PATH
 
           # Replace with your deployment script or commands
-          ssh -i $SSH_KEY_PATH $EC2_USER@$EC2_HOST << EOF
+          ssh -i $SSH_KEY_PATH -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << EOF
             docker pull $ECR_REPO_URL:$IMAGE_TAG
             docker stop task-tracker || true
             docker rm task-tracker || true
