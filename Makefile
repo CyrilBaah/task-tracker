@@ -9,7 +9,7 @@ build:
 
 # Run Docker container in detached mode
 run:
-    docker run -d -p $(PORT):$(PORT) --name $(CONTAINER_NAME) $(IMAGE_NAME)
+	docker run -d -p $(PORT):$(PORT) --name $(CONTAINER_NAME) $(IMAGE_NAME)
 
 # Stop Docker container
 stop:
