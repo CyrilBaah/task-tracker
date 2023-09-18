@@ -1,0 +1,57 @@
+name: Push to ECR and Deploy to EC2
+
+on:
+  push:
+    branches: [stage]
+
+jobs:
+  build-and-deploy:
+    name: Build image and deploy to EC2
+    runs-on: ubuntu-latest
+    env:
+      SSH_KEY_PATH: ./ssh-key.pem  
+
+    steps:
+      - name: Check Out Repo
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: task-tracker
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      - name: Deploy to EC2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          ECR_REPO_URL: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}
+          IMAGE_TAG: latest
+        run: |
+          # Save the SSH private key to a file
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > $SSH_KEY_PATH
+
+          # Secure the private key file permissions
+          chmod 600 $SSH_KEY_PATH
+
+          # Replace with your deployment script or commands
+          ssh -i $SSH_KEY_PATH ec2-user@your-ec2-instance-ip << EOF
+            docker pull $ECR_REPO_URL:$IMAGE_TAG
+            docker stop task-tracker || true
+            docker rm task-tracker || true
+            docker run -d -p 3000:3000 --name task-tracker $ECR_REPO_URL:$IMAGE_TAG
+          EOF
