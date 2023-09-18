@@ -49,29 +49,4 @@ jobs:
         docker build -t task-tracker:latest .
         trivy --exit-code 0 --severity HIGH,CRITICAL task-tracker:latest
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Install NestJS CLI
-      run: npm install -g @nestjs/cli
-
-    - name: Deploy to GitHub Pages
-      run: |
-        npm install -g gh-pages
-        npm install
-        npm run start
-        gh-pages -d dist -b gh-pages
-
-    - name: Deployment Status
-      run: |
-        if [ $? -eq 0 ]; then
-          echo "Deployment succeeded! Access your site at https://<github-username>.github.io/<repository-name>/"
-        else
-          echo "Deployment failed."
-          exit 1
-        fi
+  
