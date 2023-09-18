@@ -41,8 +41,9 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          ECR_REPO_URL: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}
+          ECR_REPOSITORY: task-tracker
           IMAGE_TAG: latest
+          ECR_REPO_URL: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
         run: |
           # Save the SSH private key to a file
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > $SSH_KEY_PATH
@@ -54,12 +55,9 @@ jobs:
           ssh -i $SSH_KEY_PATH -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << EOF
           # Debug: Print the values of variables
             echo "ECR_REPO_URL: $ECR_REPO_URL"
-            echo "IMAGE_TAG: $IMAGE_TAG"
-            echo "ECR_REPOSITORY: $ECR_REPOSITORY"
-            echo "Full URL: $ECR_REPO_URL$ECR_REPOSITORY:$IMAGE_TAG"
 
             # Attempt to pull the image
-            docker pull "$ECR_REPO_URL$ECR_REPOSITORY:$IMAGE_TAG"
+            docker pull "$ECR_REPO_URL"
 
             docker stop task-tracker || true
             docker rm task-tracker || true
