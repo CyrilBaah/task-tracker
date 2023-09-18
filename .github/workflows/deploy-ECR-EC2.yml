@@ -46,15 +46,6 @@ jobs:
 
           ECR_REPO: ${{ steps.login-ecr.outputs.registry }}
 
-          ECR_REPO_URL: ${{ env.ECR_REPO }}/${{ env.IMAGE_TAG }}
-          
-          ECR_REPO_URL1: ${{ env.ECR_REPO }}/:${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
-          ECR_REPO_URL2: ${{ env.ECR_REPO }}${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
-          ECR_REPO_URL3: ${{ env.ECR_REPO }}:${{ env.ECR_REPOSITORY }}
-          ECR_REPO_URL4: ${{ env.ECR_REPO }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
-
-
-
         run: |
           # Save the SSH private key to a file
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > $SSH_KEY_PATH
@@ -62,24 +53,19 @@ jobs:
           # Secure the private key file permissions
           chmod 600 $SSH_KEY_PATH
 
+          # Concatenate the ECR repository URL and the image tag
+          ECR_REPO_URL="$ECR_REPO/${ECR_REPOSITORY}:${IMAGE_TAG}"
+
           # Replace with your deployment script or commands
           ssh -i $SSH_KEY_PATH -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << EOF
           # Debug: Print the values of variables
             echo "ECR_REPO: $ECR_REPO"
             echo "ECR_REPO_URL: $ECR_REPO_URL"
-            echo "ECR_REPO_URL1: $ECR_REPO_URL1"
-            echo "ECR_REPO_URL2: $ECR_REPO_URL2"
-            echo "ECR_REPO_URL3: $ECR_REPO_URL3"
-            echo "ECR_REPO_URL4: $ECR_REPO_URL4"
-
-
-
 
             # Attempt to pull the image
             docker pull "$ECR_REPO_URL"
-            docker pull "$ECR_REPO_URL:$IMAGE_TAG"
 
             docker stop task-tracker || true
             docker rm task-tracker || true
-            docker run -d -p 3000:3000 --name task-tracker $ECR_REPO_URL:$IMAGE_TAG
+            docker run -d -p 3000:3000 --name task-tracker $ECR_REPO_URL
           EOF
