@@ -69,6 +69,7 @@ jobs:
             docker rm task-tracker || true
             docker run -d -p 3000:3000 --name task-tracker $ECR_REPO_URL
           EOF
+          
   
   slack-workflow-status:
     if: always()
@@ -87,4 +88,4 @@ jobs:
           channel: '#task-tracker' # Adjust the channel name
           name: 'Task Tracker Bot'
           icon_emoji: '👌'
-          icon_url: 'https://www.awtsyde.com/wp-content/uploads/2023/05/Logo_main-02.png'
+          icon_url: 'https://avatars0.githubusercontent.com/u/1701160?s=96&v=2'
