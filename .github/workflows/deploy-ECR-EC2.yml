@@ -85,7 +85,6 @@ jobs:
           slack_webhook_url: ${{secrets.SLACK_WEBHOOK_URL}}
           # Optional Input
           channel: '#task-tracker' # Adjust the channel name
-          name: 'Slack Workflow Bot'
-          icon_emoji: ':-)'
+          name: 'Task Tracker Bot'
+          icon_emoji: '👌'
           icon_url: 'https://www.awtsyde.com/wp-content/uploads/2023/05/Logo_main-02.png'
-  
