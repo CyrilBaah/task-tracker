@@ -67,3 +67,6 @@ Example using cURL (replace <taskId> with the actual task ID):
 ```sh
 curl -X DELETE http://localhost:3000/tasks/<taskId>
 ```
+
+## Using Docker
+Refer to the Makefile to already prepare commands | [Makefile](https://github.com/CyrilBaah/task-tracker/blob/dev/Makefile)
