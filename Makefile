@@ -39,6 +39,14 @@ images:
 exec:
 	docker exec -it $(CONTAINER_NAME) bash
 
+# Create Kubernetes cluster with 2 worker and one control plane
+create-cluster:
+	kind create cluster --config cluster-config.yml
+
+# Create Kubernetes cluster with 2 worker and one control plane
+delete-cluster:
+	kind delete cluster --name kind
+
 # Clean up (stop and remove) all containers and images
 clean:
 	docker stop $(shell docker ps -aq) || true
