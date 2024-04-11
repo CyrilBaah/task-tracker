@@ -51,7 +51,7 @@ npm run format
 
 Example using cURL:
 ```sh
-curl -X POST -H "Content-Type: application/json" -d '{"title": "Task 1"}' http://localhost:3000/tasks
+curl -X POST -H "Content-Type: application/json" -d '{"title": "Kubernetes section | creative sparks"}' http://localhost:3000/tasks
 ```
 
 2.To list all tasks, send a GET request to http://localhost:3000/tasks.
