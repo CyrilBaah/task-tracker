@@ -70,3 +70,37 @@ curl -X DELETE http://localhost:3000/tasks/<taskId>
 
 ## Using Docker
 Refer to the Makefile to already prepare commands | [Makefile](https://github.com/CyrilBaah/task-tracker/blob/dev/Makefile)
+
+## Set Up [Ingress](https://kind.sigs.k8s.io/docs/user/ingress/#using-ingress)
+
+```sh
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+```
+
+2. Create Admission Webhook
+```sh
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+```
+
+3. Wait for process to be ready
+```sh
+kubectl wait --namespace ingress-nginx \
+  --for=condition=ready pod \
+  --selector=app.kubernetes.io/component=controller \
+  --timeout=90s
+  ```
+
+4. Verify Ingress resource
+```sh
+kubectl get ingress
+```
+
+5. Set DNS Resolutions locally
+```sh
+sudo nano /etc/hosts
+```
+
+6. Update the file with dns of you choice. ie. [task.local](http://task.local)
+```sh
+127.0.0.1 task.local
+```
