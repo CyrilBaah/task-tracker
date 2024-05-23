@@ -15,8 +15,13 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+    it('should return the correct JSON response', () => {
+      const result = appController.getHello();
+      const expected = {
+        success: true,
+        message: 'Task Tracker',
+      };
+      expect(JSON.parse(result)).toEqual(expected);
     });
   });
 });
