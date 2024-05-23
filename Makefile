@@ -39,6 +39,18 @@ images:
 exec:
 	docker exec -it $(CONTAINER_NAME) bash
 
+# Create Kubernetes cluster with 2 worker and one control plane
+create-cluster:
+	kind create cluster --config cluster-config.yml
+
+# Delete the Kubernetes cluster 
+delete-cluster:
+	kind delete cluster --name kind
+
+# Make service accessible
+port-forward:
+	kubectl port-forward service/task-tracker 3000:3000
+
 # Clean up (stop and remove) all containers and images
 clean:
 	docker stop $(shell docker ps -aq) || true
@@ -59,6 +71,9 @@ help:
 	@echo "  exec            Execute a command inside the running container"
 	@echo "  clean           Clean up (stop and remove) all containers and images"
 	@echo "  help            Display this help message"
+	@echo "  create-cluster  Create Kubernetes cluster with 2 worker and one control plane"
+	@echo "  delete-cluster  Delete the Kubernetes cluster"
+
 
 # Make the 'build' target the default target when 'make' is run without arguments
 .DEFAULT_GOAL := build
